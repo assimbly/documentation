@@ -32,8 +32,8 @@ The **APIs** page lets you design a REST API the same way you would write an [Op
 2. Click **Add**.
 3. Fill in the form:
    * **Name:** `Greetings`
-   * **Base path:** `/greetings`
-   * **Version:** `1.0`
+   * **Base path:** `/greetings` (the field already starts with `/`, so type `greetings` after it)
+   * **Version:** keep `1.0`
    * **Description:** `Says hello to whoever asks.`
 
 ![Create the API](01-new-api.png)
@@ -44,7 +44,7 @@ The **APIs** page lets you design a REST API the same way you would write an [Op
 
 1. Click **New Operation**. A panel opens on the right.
 2. Keep **Method** on `GET`.
-3. In **Path**, type `/{name}` after `/greetings`. The part between curly braces is a *path parameter*. It appears under **Parameters** by itself.
+3. **Path** already shows `/greetings` and `/`. Type `{name}` after the `/`, so it reads `/{name}`. The part between curly braces is a *path parameter*. It appears under **Parameters** by itself.
 4. Set **operationId** to `sayHello` and **Summary** to `Say hello`.
 
 ![Add the Operation](02-new-operation.png)
@@ -73,13 +73,11 @@ Right now the Flow would answer with an empty message. Add an Action that writes
    {"message": "Hello ${header.name}!"}
    ```
 
-5. Click **+** next to the option to add a second one. Choose **Language** and type `simple`.
-
 ![Configure the Set body Action](05-set-body.png)
 
-6. Click **Save**, then **Start**.
+5. Click **Save**, then **Start**.
 
-> **What does `${header.name}` do?** The Gateway puts every path parameter in a header with the same name. `${header.name}` is an expression in Camel's [Simple language](https://camel.apache.org/components/latest/languages/simple-language.html) that reads that header. The **Language** option `simple` tells the Action to evaluate the expression, instead of sending it as plain text.
+> **What does `${header.name}` do?** The Gateway puts every path parameter in a header with the same name. `${header.name}` is an expression in Camel's [Simple language](https://camel.apache.org/components/latest/languages/simple-language.html) that reads that header. SETBODY evaluates its expression with Simple by default. To send the text exactly as typed, add the option **Language** with the value `constant`.
 
 ## Step 4: Call your API
 

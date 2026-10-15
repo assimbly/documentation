@@ -78,7 +78,8 @@ The Source picks up the file, but the Sink can't store it. In the editor header 
 An alert is a one-line summary. The full details, such as the headers of the message and the stack trace, are in the Gateway log. You see the log in the terminal where you started the Gateway, or in your browser:
 
 1. Go to **Administration → Log viewer**.
-2. Type `Cannot store file` in the search box.
+2. Set **Lines** to `3000` and click **Refresh**. The Gateway logs a lot, so the default 250 lines often no longer reach back to the error.
+3. Type `Cannot store file` in the filter box.
 
 ![The error in the log viewer](05-log-viewer.png)
 
