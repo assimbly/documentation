@@ -74,21 +74,27 @@ Under **Response body** you see the answer. The `message` is the status of the F
 
 Use the token from Step 2. Replace `1051` with the id of your *TestFlow*.
 
+The Gateway keeps your Flows in its database, and runs them in its *runtime*. To start a Flow from the API, you hand the runtime the Flow's configuration: first fetch the configuration from the Gateway, then send it to the `install` endpoint. `install` loads the Flow into the runtime and starts it.
+
 **Windows (PowerShell)**
 
 ```powershell
-(Invoke-RestMethod -Uri http://localhost:8088/api/integration/flow/1051/start -Headers $headers).flow.message
+$config = (Invoke-WebRequest -UseBasicParsing -Uri http://localhost:8088/api/environment/1/flow/1051 -Headers @{ Authorization = $headers.Authorization; Accept = 'application/xml'; PlaceholderReplacement = 'true' }).Content
+(Invoke-RestMethod -Method Post -Uri http://localhost:8088/api/integration/flow/1051/install -Headers $headers -ContentType 'application/xml; charset=utf-8' -Body $config).flow.message
 Invoke-RestMethod -Uri http://localhost:8088/api/integration/flow/1051/status -Headers $headers
 ```
 
 **Linux / macOS**
 
 ```bash
-curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/integration/flow/1051/start
+curl -s -H "Authorization: Bearer $TOKEN" -H "Accept: application/xml" -H "PlaceholderReplacement: true" http://localhost:8088/api/environment/1/flow/1051 -o testflow.xml
+curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/xml" -H "Accept: application/json" --data-binary @testflow.xml http://localhost:8088/api/integration/flow/1051/install
 curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/integration/flow/1051/status
 ```
 
-The `start` call answers with a report that contains the message `Started flow successfully`. The `status` call answers `started`.
+The `install` call answers with a report that contains the message `Started flow successfully`. The `status` call answers `started`.
+
+> **Why not just `start`?** `start` only starts a Flow that the runtime already knows: a Flow that was installed since the Gateway started, for example by clicking **Start** in the browser. After a restart of the Gateway, `start` answers `Flow not found` for such a Flow. `install` always works, because it brings the configuration along.
 
 Now look in the browser: **Flows → Manage** shows *TestFlow* as running, although you never clicked **Start**:
 
@@ -108,7 +114,7 @@ Put a file in the `C:\messages\in` folder and see it arrive in the `out` folder,
 curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/integration/flow/1051/stats
 ```
 
-The answer contains the same **completed** and **failed** counters you see in the Flow editor.
+The answer contains the **completedTransactions** and **failedTransactions** counters: the same numbers you see in the Flow editor, one per message. The **completed** and **failed** fields count the Steps that processed a message, so they're higher when a Flow has more than one Step.
 
 Finally, stop the Flow:
 
@@ -130,15 +136,16 @@ It answers with the message `Stopped flow successfully`.
 
 ## Useful endpoints
 
-All endpoints below start with `http://localhost:8088/api/integration/flow/{flowId}/` and use `GET`:
+All endpoints below start with `http://localhost:8088/api/integration/flow/{flowId}/` and use `GET`, except `install`:
 
 | Endpoint | What it does |
 |----------|--------------|
-| `start` / `stop` | Starts or stops the Flow. |
+| `install` (`POST`) | Loads the Flow's configuration into the runtime and starts it. |
+| `start` / `stop` | Starts or stops a Flow that was installed. |
 | `pause` / `resume` | Pauses the Flow and resumes it later. |
 | `restart` | Stops the Flow and starts it again. |
 | `status` | Tells whether the Flow runs: `started`, or `unconfigured` when it doesn't. |
-| `stats` | The completed and failed counters. |
+| `stats` | The counters: `completedTransactions` and `failedTransactions` per message, `completed` and `failed` per Step. |
 | `uptime` | How long the Flow has been running. |
 | `lasterror` | The last error of the Flow. |
 

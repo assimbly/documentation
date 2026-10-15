@@ -29,7 +29,7 @@ The Flow *SplitNames* has three routes. They pass messages to each other with `d
 
 You could write it all in one route. Splitting it up keeps each route small, and you can reuse a route, such as *SplitXML*, from other routes.
 
-## Step 1: Create the Flow and look up the connection id
+## Step 1: Create the Flow
 
 1. Go to **Flows → Manage**, click **Add** and choose **Camel route**.
 2. Next to **Flow name**, type `SplitNames`.
@@ -37,24 +37,15 @@ You could write it all in one route. Splitting it up keeps each route small, and
 4. Click **Add** under the route field and choose **Connection**. A **Connection** field appears.
 5. In **Connection**, choose `LocalBroker`.
 
-A route refers to its connection by id. To look the id up:
-
-6. Click the **Edit connection** icon next to the **Connection** field. Write down the **ID**:
-
-![The connection id](01-connection-id.png)
-
-7. Close the window with **Cancel**. Don't click **Save** here.
-8. If the **Connection** field is empty again, choose `LocalBroker` once more.
-
-> In a visual Flow, choosing the connection is enough. In a Camel route you also name it in the URI, with `connectionFactory=#bean:<id>`. That's why you need the id.
+> The JMS endpoints of a route (`sjms:`, `sjms2:`, `jms:` and `activemq:`) use the connection you choose here. Only when an endpoint needs another connection, you name that one in the URI yourself, with `connectionFactory=#<id>`. You find a connection's id with the **Edit connection** icon next to the **Connection** field.
 
 ## Step 2: Write the inbound route
 
-Copy this route into the **Route** field of *InboundXML*. Replace `6252` with the id you wrote down:
+Copy this route into the **Route** field of *InboundXML*:
 
 ```xml
 <route>
-    <from uri="sjms:NamesIn?connectionFactory=#bean:6252"/>
+    <from uri="sjms:NamesIn"/>
     <log message="Received a list of names"/>
     <to uri="direct:split"/>
 </route>
@@ -84,17 +75,17 @@ The `<split>` uses the [XPath](https://camel.apache.org/components/latest/langua
 ## Step 4: Write the outbound route
 
 1. Under *SplitXML*, click **Add** and choose **Route**.
-2. Set **Route name** to `OutboundXML` and copy this route into its **Route** field. Again, replace `6252` with your connection id:
+2. Set **Route name** to `OutboundXML` and copy this route into its **Route** field:
 
 ```xml
 <route>
     <from uri="direct:outbound"/>
     <log message="Sending one name"/>
-    <to uri="sjms:NamesOut?connectionFactory=#bean:6252"/>
+    <to uri="sjms:NamesOut"/>
 </route>
 ```
 
-3. Under *OutboundXML*, click **Add**, choose **Connection** and select `LocalBroker`.
+3. Under *OutboundXML*, click **Add**, choose **Connection** and select `LocalBroker`. Each route uses its own connection, so this route needs one too.
 
 ![The split and outbound routes](03-split-outbound.png)
 

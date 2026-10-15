@@ -15,7 +15,7 @@ It takes about 15 minutes.
 ## Before you start
 
 * Complete the [Quick start](https://github.com/assimbly/gateway/wiki/quick-start). You need the Gateway running and the *TestFlow* that moves files from `C:/messages/in` to `C:/messages/out`.
-* Do [Tutorial 5](https://github.com/assimbly/gateway/wiki/tutorial6-create-a-new-broker) first if you don't know the broker yet. You need a running broker, such as the *default* broker that comes with the Gateway.
+* Do [Tutorial 5](https://github.com/assimbly/gateway/wiki/tutorial6-manage-the-broker) first if you don't know the broker yet. You need a running broker, such as the *default* broker that comes with the Gateway.
 * Make sure *TestFlow* is stopped (see **Flows → Manage**). Otherwise it picks up the files before the new Flows can.
 
 > On Linux or macOS, use `/home/<you>/messages/...` wherever this tutorial says `C:/messages/...`.

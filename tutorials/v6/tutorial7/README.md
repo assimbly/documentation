@@ -91,7 +91,7 @@ The route picks up the file and moves it to the `C:\messages\out` folder. The **
 ## Step 4: Find the log message
 
 1. Go to **Administration → Log viewer**.
-2. Type `Received file` in the search box.
+2. Type `Received file names` in the filter box.
 
 ![The log message](04-log-viewer.png)
 

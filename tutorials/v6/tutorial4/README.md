@@ -149,4 +149,4 @@ When you're done, stop the *sayHello* Flow with **Stop** in its editor.
 | Operation `GET /{name}` | **New Operation** | Defines what clients can call. Creates the Handler Flow. |
 | Handler Flow *sayHello* | Flow editor | **Operation** receives the request, **SETBODY** writes the answer, **Response** sends it back with status 200. |
 
-**Done!** You created your first REST API. Continue with [Tutorial 5: Create a new broker](https://github.com/assimbly/gateway/wiki/tutorial6-create-a-new-broker).
+**Done!** You created your first REST API. Continue with [Tutorial 5: Manage the broker](https://github.com/assimbly/gateway/wiki/tutorial6-manage-the-broker).
