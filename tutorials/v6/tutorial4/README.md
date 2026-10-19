@@ -66,8 +66,8 @@ The Gateway already built the Flow for you. It has two Steps: the **Operation** 
 Right now the Flow would answer with an empty message. Add an Action that writes the answer:
 
 2. Click the **+** on the line between the Operation and the Response.
-3. Type `body` in the search box and choose **SETBODY**.
-4. Under **Options**, choose **Expression** in the list and type:
+3. Type `body` in the search box and choose **Set body**.
+4. Under **Options**, the rows **Expression** and **Language** are already there. Next to **Expression**, type:
 
    ```
    {"message": "Hello ${header.name}!"}
@@ -77,7 +77,9 @@ Right now the Flow would answer with an empty message. Add an Action that writes
 
 5. Click **Save**, then **Start**.
 
-> **What does `${header.name}` do?** The Gateway puts every path parameter in a header with the same name. `${header.name}` is an expression in Camel's [Simple language](https://camel.apache.org/components/latest/languages/simple-language.html) that reads that header. SETBODY evaluates its expression with Simple by default. To send the text exactly as typed, add the option **Language** with the value `constant`.
+> **What does `${header.name}` do?** The Gateway puts every path parameter in a header with the same name. `${header.name}` is an expression in Camel's [Simple language](https://camel.apache.org/components/latest/languages/simple-language.html) that reads that header. Set body evaluates its expression with Simple by default, so leave **Language** empty. To send the text exactly as typed, set **Language** to `constant`.
+
+> **Longer expressions?** Click **⋮** at the end of the **Expression** row to write it in a larger editor. A Set body has no path, so its **Path** field is read-only.
 
 ## Step 4: Call your API
 
@@ -106,6 +108,8 @@ The answer:
 ```
 
 > **Why `-k`?** A Gateway on your own machine uses a certificate that `curl` doesn't trust. `-k` tells it to accept the certificate anyway. You can also open `https://localhost:9001/greetings/World` in your browser and accept the warning.
+>
+> **No answer at all?** If `curl` says the TLS handshake failed, the Gateway has no certificate of its own yet. Go to **Administration → Certificates**, click **Add → Self-signed identity**, type `localhost` under **Common Name (CN)** and click **Generate**. Then call the API again; you don't need to restart anything.
 
 ## Step 5: Export the API as an OpenAPI file
 
@@ -147,6 +151,6 @@ When you're done, stop the *sayHello* Flow with **Stop** in its editor.
 |------|-------|--------------|
 | API *Greetings* | **APIs → Add** | Groups the Operations under the base path `/greetings`. |
 | Operation `GET /{name}` | **New Operation** | Defines what clients can call. Creates the Handler Flow. |
-| Handler Flow *sayHello* | Flow editor | **Operation** receives the request, **SETBODY** writes the answer, **Response** sends it back with status 200. |
+| Handler Flow *sayHello* | Flow editor | **Operation** receives the request, **Set body** writes the answer, **Response** sends it back with status 200. |
 
 **Done!** You created your first REST API. Continue with [Tutorial 5: Manage the broker](https://github.com/assimbly/gateway/wiki/tutorial6-manage-the-broker).

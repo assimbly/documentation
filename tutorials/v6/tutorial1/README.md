@@ -77,18 +77,17 @@ The Source picks up the file, but the Sink can't store it. In the editor header 
 
 An alert is a one-line summary. The full details, such as the headers of the message and the stack trace, are in the Gateway log. You see the log in the terminal where you started the Gateway, or in your browser:
 
-1. Go to **Administration → Log viewer**.
-2. Set **Lines** to `3000` and click **Refresh**. The Gateway logs a lot, so the default 250 lines often no longer reach back to the error.
-3. Type `Cannot store file` in the filter box.
+1. In the editor header of *DebugFlow*, click **Log**. A panel opens with the log of this Flow only.
+2. Type `Cannot store file` in the filter box.
 
-![The error in the log viewer](05-log-viewer.png)
+![The error in the log of the Flow](05-flow-log.png)
 
 You find two entries:
 
-* The first is written by the Flow's error handler. It shows the failed message: its headers, its body and the exception that was caught.
+* The first is written by the Flow's error handler. It shows the failed message: its headers, its body and the exception that was caught, followed by the stack trace.
 * The second says **Failed delivery** and gives the exception: `GenericFileOperationFailedException: Cannot store file`.
 
-> The log viewer only shows the last lines of the log (the **Lines** field). Can't find the error? Raise **Lines**, or drop another file in the `in` folder and click **Refresh**.
+> The panel shows the last entries of the log (the **Entries** field). Can't find the error? Raise **Entries**, or drop another file in the `in` folder and click **Refresh**. **Open in Log viewer** shows the same entries in **Administration → Log viewer**, where you can clear the Flow filter to see the whole Gateway log. On **Flows → Manage** you find the same panel under **⋮** → **View log**.
 
 To fix the Flow, you would create the `out2` folder or turn **Auto Create** back on. Leave it broken for now, you need it in the next step.
 
@@ -114,7 +113,7 @@ When you're done, stop *TestFlow* in **Flows → Manage**.
 |-------|-------------------|
 | **Completed** / **Failed** counters | How many messages went through the Flow, and how many failed. |
 | **Alert** badge | The latest errors of messages, one line each. |
-| **Administration → Log viewer** (or the terminal) | The full error, with the message headers and the stack trace. |
+| **Log** in the editor header (or **Administration → Log viewer**, or the terminal) | The full error, with the message headers and the stack trace. |
 | **Error** badge | Why a Flow or one of its Steps didn't start. |
 
 **Done!** You can now find out why a Flow fails. Continue with [Tutorial 2: Request/Reply](https://github.com/assimbly/gateway/wiki/tutorial6-request-reply).

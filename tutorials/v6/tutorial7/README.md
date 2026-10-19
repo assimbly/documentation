@@ -45,20 +45,20 @@ The URIs are the same as the **Component** and **Path** you chose in the visual 
 
 ![Add a Camel route Flow](01-add-flow.png)
 
-The route editor opens. Instead of a canvas, it has a field to write the route in.
+The route editor opens. Instead of a canvas, it has a field to write the route in. It starts with a small example route, which sends `Hello world` once and logs it.
 
 ## Step 2: Write the route
 
 1. Next to **Flow name**, type `SimpleRoute`.
 2. Set **Route name** to `MoveFiles`.
-3. Copy the route from [How it works](#how-it-works) into the **Route** field.
+3. Replace the example in the **Route** field with the route from [How it works](#how-it-works).
 
 ![The route](02-route.png)
 
 4. Click **Save**.
 
 > **Tips**
-> * Click the **Edit route** icon next to the field to write the route in a full-screen editor.
+> * Click the **Edit route** icon above the field to write the route in a full-screen editor.
 > * With **Add** you add more routes to the same Flow, for example routes that call each other.
 > * Under **Error handler name** you can write a route that handles errors. Leave it empty to use the default error handling.
 

@@ -20,23 +20,25 @@ It takes about 15 minutes.
 
 ## Step 1: Explore the API documentation
 
-Go to **Administration → API**. This page lists every endpoint of the API, described in [OpenAPI](https://www.openapis.org/) and shown with [Swagger UI](https://swagger.io/tools/swagger-ui/):
+Click **API Explorer** in the menu on the left and choose **Flows**. This page lists the endpoints that manage and run Flows, described in [OpenAPI](https://www.openapis.org/) and shown with [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
 ![The API documentation](01-api-docs.png)
 
-* Use **Select a definition** at the top right to switch between groups of endpoints, such as *Integration runtime* (Flows), *Broker runtime* and *Configuration*. **All endpoints** shows them all.
-* Click a group, such as **Flow manager**, to see its endpoints. Click an endpoint to see its parameters and answers.
+* The other entries under **API Explorer**, such as **Broker**, **Configuration** and **Observability**, show the other groups of endpoints. **All endpoints** shows them all. **Select a definition** at the top right switches between the same groups.
+* Click a section, such as **Flow manager**, to see its endpoints. Click an endpoint to see its parameters and answers.
 
-Most endpoints that act on a Flow need its **id**. The easiest way to find it: open the Flow in the editor and look at the address bar. For *TestFlow*, the address ends with something like `/flow/editor/1051?...`, so its id is `1051`. Your id will probably be different. Use your own id wherever this tutorial says `1051`.
+Most endpoints that act on a Flow need its **id**. The easiest way to find it: open the Flow in the editor and look at the address bar. For *TestFlow*, the address ends with something like `/flow/editor/1052?...`, so its id is `1052`. Your id will probably be different. Use your own id wherever this tutorial says `1052`.
 
 ## Step 2: Log in and get a token
 
 The API is protected. You log in once with your username and password, and get a **token** (a [JSON Web Token](https://jwt.io/introduction)) in return. You send that token along with every following call.
 
+Use the password you chose the first time you signed in (see the Quick start). Replace `your-password` in the commands below with it.
+
 **Windows (PowerShell)**
 
 ```powershell
-$login = Invoke-RestMethod -Method Post -Uri http://localhost:8088/api/authenticate -ContentType 'application/json' -Body '{"username":"admin","password":"admin"}'
+$login = Invoke-RestMethod -Method Post -Uri http://localhost:8088/api/authenticate -ContentType 'application/json' -Body '{"username":"admin","password":"your-password"}'
 $headers = @{ Authorization = "Bearer $($login.id_token)"; Accept = '*/*' }
 $login.id_token
 ```
@@ -44,7 +46,7 @@ $login.id_token
 **Linux / macOS**
 
 ```bash
-TOKEN=$(curl -s -X POST -H 'Content-Type: application/json' -d '{"username":"admin","password":"admin"}' http://localhost:8088/api/authenticate | sed -n 's/.*"id_token" *: *"\([^"]*\)".*/\1/p')
+TOKEN=$(curl -s -X POST -H 'Content-Type: application/json' -d '{"username":"admin","password":"your-password"}' http://localhost:8088/api/authenticate | sed -n 's/.*"id_token" *: *"\([^"]*\)".*/\1/p')
 echo $TOKEN
 ```
 
@@ -56,13 +58,13 @@ Both print a long string that starts with `eyJ`. That's your token.
 
 Swagger UI can call the API for you, which is a handy way to try an endpoint before you script it.
 
-1. On **Administration → API**, click **Authorize**.
+1. On **API Explorer → Flows**, click **Authorize**.
 2. Paste your token under **Value** and click **Authorize**, then **Close**.
 
 ![Authorize with your token](02-authorize.png)
 
 3. Open **Flow manager** and click **GET /api/integration/flow/{flowId}/status**.
-4. Click **Try it out**, fill in your Flow id under **flowId** and click **Execute**.
+4. Under **flowId**, replace the example value with your Flow id and click **Execute**.
 
 ![Try the status endpoint](03-try-it-out.png)
 
@@ -72,24 +74,24 @@ Under **Response body** you see the answer. The `message` is the status of the F
 
 ## Step 4: Start and stop a Flow from the command line
 
-Use the token from Step 2. Replace `1051` with the id of your *TestFlow*.
+Use the token from Step 2. Replace `1052` with the id of your *TestFlow*.
 
 The Gateway keeps your Flows in its database, and runs them in its *runtime*. To start a Flow from the API, you hand the runtime the Flow's configuration: first fetch the configuration from the Gateway, then send it to the `install` endpoint. `install` loads the Flow into the runtime and starts it.
 
 **Windows (PowerShell)**
 
 ```powershell
-$config = (Invoke-WebRequest -UseBasicParsing -Uri http://localhost:8088/api/environment/1/flow/1051 -Headers @{ Authorization = $headers.Authorization; Accept = 'application/xml'; PlaceholderReplacement = 'true' }).Content
-(Invoke-RestMethod -Method Post -Uri http://localhost:8088/api/integration/flow/1051/install -Headers $headers -ContentType 'application/xml; charset=utf-8' -Body $config).flow.message
-Invoke-RestMethod -Uri http://localhost:8088/api/integration/flow/1051/status -Headers $headers
+$config = (Invoke-WebRequest -UseBasicParsing -Uri http://localhost:8088/api/environment/1/flow/1052 -Headers @{ Authorization = $headers.Authorization; Accept = 'application/xml'; PlaceholderReplacement = 'true' }).Content
+(Invoke-RestMethod -Method Post -Uri http://localhost:8088/api/integration/flow/1052/install -Headers $headers -ContentType 'application/xml; charset=utf-8' -Body $config).flow.message
+Invoke-RestMethod -Uri http://localhost:8088/api/integration/flow/1052/status -Headers $headers
 ```
 
 **Linux / macOS**
 
 ```bash
-curl -s -H "Authorization: Bearer $TOKEN" -H "Accept: application/xml" -H "PlaceholderReplacement: true" http://localhost:8088/api/environment/1/flow/1051 -o testflow.xml
-curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/xml" -H "Accept: application/json" --data-binary @testflow.xml http://localhost:8088/api/integration/flow/1051/install
-curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/integration/flow/1051/status
+curl -s -H "Authorization: Bearer $TOKEN" -H "Accept: application/xml" -H "PlaceholderReplacement: true" http://localhost:8088/api/environment/1/flow/1052 -o testflow.xml
+curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/xml" -H "Accept: application/json" --data-binary @testflow.xml http://localhost:8088/api/integration/flow/1052/install
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/integration/flow/1052/status
 ```
 
 The `install` call answers with a report that contains the message `Started flow successfully`. The `status` call answers `started`.
@@ -105,13 +107,13 @@ Put a file in the `C:\messages\in` folder and see it arrive in the `out` folder,
 **Windows (PowerShell)**
 
 ```powershell
-(Invoke-RestMethod -Uri http://localhost:8088/api/integration/flow/1051/stats -Headers $headers).flow
+(Invoke-RestMethod -Uri http://localhost:8088/api/integration/flow/1052/stats -Headers $headers).flow
 ```
 
 **Linux / macOS**
 
 ```bash
-curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/integration/flow/1051/stats
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/integration/flow/1052/stats
 ```
 
 The answer contains the **completedTransactions** and **failedTransactions** counters: the same numbers you see in the Flow editor, one per message. The **completed** and **failed** fields count the Steps that processed a message, so they're higher when a Flow has more than one Step.
@@ -121,13 +123,13 @@ Finally, stop the Flow:
 **Windows (PowerShell)**
 
 ```powershell
-(Invoke-RestMethod -Uri http://localhost:8088/api/integration/flow/1051/stop -Headers $headers).flow.message
+(Invoke-RestMethod -Uri http://localhost:8088/api/integration/flow/1052/stop -Headers $headers).flow.message
 ```
 
 **Linux / macOS**
 
 ```bash
-curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/integration/flow/1051/stop
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/integration/flow/1052/stop
 ```
 
 It answers with the message `Stopped flow successfully`.
@@ -149,15 +151,15 @@ All endpoints below start with `http://localhost:8088/api/integration/flow/{flow
 | `uptime` | How long the Flow has been running. |
 | `lasterror` | The last error of the Flow. |
 
-You find many more on **Administration → API**: to manage the broker, import and export Flows, read health and metrics, and so on.
+You find many more under **API Explorer**: to manage the broker, import and export Flows, read health and metrics, and so on.
 
 ## Summary
 
 | What | Where |
 |------|-------|
-| API documentation | **Administration → API** |
+| API documentation | **API Explorer** |
 | Log in | `POST /api/authenticate` with your username and password. The answer contains the token (`id_token`). |
 | Call the API | Send the header `Authorization: Bearer <token>` with every call. |
-| Find a Flow id | The address bar of the Flow editor, for example `/flow/editor/1051`. |
+| Find a Flow id | The address bar of the Flow editor, for example `/flow/editor/1052`. |
 
 **Done!** You completed all the Assimbly Gateway 6 tutorials. Want to know more? Read the [user guide](https://github.com/assimbly/gateway/wiki/user-guide) and the rest of the [wiki](https://github.com/assimbly/gateway/wiki). Questions or problems? [Open an issue](https://github.com/assimbly/gateway/issues).

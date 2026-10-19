@@ -113,6 +113,8 @@ Every minute the Flow calls the API again and overwrites `weather.json` with the
 When you're done, click **Stop**. Otherwise the Flow keeps calling the API every minute.
 
 > **No file?** Click the **Alert** badge in the editor header to see the error. See [Tutorial 1](https://github.com/assimbly/gateway/wiki/tutorial6-debugging-a-flow) for more on finding errors.
+>
+> **`the trustAnchors parameter must be non-empty`?** A new Gateway doesn't trust any HTTPS site yet. Go to **Administration → Certificates**, click **Add → Download certificate**, type `https://api.open-meteo.com` under **Url** and click **Add**. Then click **Stop** and **Start** on the Flow.
 
 ## Summary
 

@@ -39,20 +39,20 @@ The calculator is a SOAP web service. It only accepts a request when the `Conten
 
 1. Click the **+** on the line between the Source and the Sink.
 2. Make sure **Action** is selected, and type `header` in the search box.
-3. Choose **SETHEADER**.
+3. Choose **Set header**.
 
 ![Add an Action](01-add-action.png)
 
 The Action appears between the Source and the Sink, and its settings open on the right:
 
 4. Set **Path** (the name of the header) to `Content-Type`.
-5. Under **Options**, choose **Value** in the list and type `text/xml`.
+5. Under **Options**, the rows **language** and **Value** are already there. Type `text/xml` next to **Value**.
 
 ![Configure the Set header Action](02-set-header.png)
 
 ## Step 3: Add an Action that calls the web service
 
-1. Click the **+** on the line between the *setheader* Action and the Sink.
+1. Click the **+** on the line between the *Set header* Action and the Sink.
 2. Type `http` in the search box and choose **HTTP**.
 3. Set **Path** to `www.dneonline.com/calculator.asmx`.
 4. Under **Options**, choose **Http Method** in the list and select **POST**.
@@ -113,7 +113,7 @@ When you're done, stop *Calculator* with **Stop**.
 | Step | Component | What it does |
 |------|-----------|--------------|
 | Source | **File** | Picks up the request from the `in` folder. |
-| Action | **SETHEADER** | Sets the header `Content-Type: text/xml`, so the service knows the message is XML. |
+| Action | **Set header** | Sets the header `Content-Type: text/xml`, so the service knows the message is XML. |
 | Action | **HTTP** | Sends the message to the web service with a POST and waits for the reply. The reply becomes the new message. |
 | Sink | **File** | Saves the reply in the `out` folder. |
 

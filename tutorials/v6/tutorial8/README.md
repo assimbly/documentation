@@ -37,11 +37,11 @@ You could write it all in one route. Splitting it up keeps each route small, and
 4. Click **Add** under the route field and choose **Connection**. A **Connection** field appears.
 5. In **Connection**, choose `LocalBroker`.
 
-> The JMS endpoints of a route (`sjms:`, `sjms2:`, `jms:` and `activemq:`) use the connection you choose here. Only when an endpoint needs another connection, you name that one in the URI yourself, with `connectionFactory=#<id>`. You find a connection's id with the **Edit connection** icon next to the **Connection** field.
+> The JMS endpoints of a route (`sjms:`, `sjms2:`, `jms:` and `activemq:`) use the connection you choose here. Only when an endpoint needs another connection, you name that one in the URI yourself, with `connectionFactory=#<id>`. You find a connection's id with the **Edit connection** icon above the **Connection** field.
 
 ## Step 2: Write the inbound route
 
-Copy this route into the **Route** field of *InboundXML*:
+Replace the example route in the **Route** field of *InboundXML* with this route:
 
 ```xml
 <route>
@@ -95,7 +95,7 @@ You don't need to create the queues *NamesIn* and *NamesOut*: the broker creates
 
 ## Step 5: Send a list of names
 
-1. Go to **Broker → Endpoints**. You see *NamesIn* with 1 consumer: your *InboundXML* route.
+1. Go to **Broker → Endpoints**. You see *NamesIn* with 1 consumer: your *InboundXML* route. (Don't see it? The filter box keeps what you typed last time, such as `Orders` from Tutorial 6. Clear it with **×**.)
 2. Click **Send** in the row of *NamesIn*.
 3. Paste this XML into the **Body**:
 
