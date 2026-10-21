@@ -12,7 +12,7 @@ It takes about 10 minutes.
 
 ## Before you start
 
-* Complete the [Quick start](https://github.com/assimbly/gateway/wiki/quick-start). You need the Gateway running and the *TestFlow* that moves files from `C:/messages/in` to `C:/messages/out`.
+* Complete [Tutorial 1](https://github.com/assimbly/gateway/wiki/tutorial6-debugging-a-flow), at least part 1. You need the Gateway running and the *TestFlow* that moves files from `C:/messages/in` to `C:/messages/out`.
 * The Gateway needs internet access. The Flow calls the calculator service at `www.dneonline.com`.
 
 > On Linux or macOS, use `/home/<you>/messages/...` wherever this tutorial says `C:/messages/...`.

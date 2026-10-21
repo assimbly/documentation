@@ -13,7 +13,7 @@ It takes about 15 minutes.
 
 ## Before you start
 
-* Complete the [Quick start](https://github.com/assimbly/gateway/wiki/quick-start). You need the Gateway running and the *TestFlow*.
+* Complete [Tutorial 1](https://github.com/assimbly/gateway/wiki/tutorial6-debugging-a-flow), at least part 1. You need the Gateway running and the *TestFlow*.
 * Make sure *TestFlow* is stopped (see **Flows → Manage**).
 
 > The examples use port `8088`. Started the Gateway with `java -jar`? Then use port `8080` instead.
@@ -102,7 +102,7 @@ Now look in the browser: **Flows → Manage** shows *TestFlow* as running, altho
 
 ![TestFlow was started through the API](04-flow-running.png)
 
-Put a file in the `C:\messages\in` folder and see it arrive in the `out` folder, like in the Quick start. Then ask the API for the numbers:
+Put a file in the `C:\messages\in` folder and see it arrive in the `out` folder, like in Tutorial 1. Then ask the API for the numbers:
 
 **Windows (PowerShell)**
 
